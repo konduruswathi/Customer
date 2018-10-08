@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.customer.entities.Customer;
 import com.capgemini.customer.exception.AuthenticationFailedException;
-import com.capgemini.customer.exceptions.CustomerNotFoundException;
+import com.capgemini.customer.exception.CustomerNotFoundException;
 import com.capgemini.customer.repository.CustomerRepository;
 import com.capgemini.customer.service.CustomerService;
 

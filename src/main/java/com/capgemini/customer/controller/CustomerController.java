@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.customer.entities.Customer;
 import com.capgemini.customer.exception.AuthenticationFailedException;
-import com.capgemini.customer.exceptions.CustomerNotFoundException;
+import com.capgemini.customer.exception.CustomerNotFoundException;
 import com.capgemini.customer.service.CustomerService;
 
 @RestController
@@ -29,40 +29,27 @@ public class CustomerController {
 	}
 
 	@PutMapping("/customer")
-	public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws CustomerNotFoundException {
+	public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) {
 
-		try {
-			Customer customerFromDb = customerService.getCustomerById(customer.getCustomerId());
-			if (customerFromDb != null) {
-				return new ResponseEntity<Customer>(customerService.updateCustomer(customerFromDb), HttpStatus.OK);
-			}
-		} catch (CustomerNotFoundException exception) {
-
-		}
-
-		return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Customer>(customerService.updateCustomer(customer), HttpStatus.OK);
 	}
 
 	@GetMapping("/customers/{customerId}")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable int customerId) throws CustomerNotFoundException {
+	public ResponseEntity<Customer> getCustomerById(@PathVariable int customerId) {
 		Customer customerFromDb = customerService.getCustomerById(customerId);
 		return new ResponseEntity<Customer>(customerFromDb, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/customers/{customerId}")
 	public ResponseEntity<Customer> deleteCustomer(@PathVariable int customerId) {
-		try {
-			Customer c = customerService.getCustomerById(customerId);
-			if (c != null) {
-				customerService.deleteCustomer(customerId);
-			return new ResponseEntity<Customer>(HttpStatus.OK);
-			}
-		} catch (CustomerNotFoundException exception) {
 
-		}
-		return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+		Customer c = customerService.getCustomerById(customerId);
+		if (c != null)
+			customerService.deleteCustomer(customerId);
+		return new ResponseEntity<Customer>(HttpStatus.OK);
 	}
-@GetMapping("/customers/{customerId}/{password}")
+
+	@GetMapping("/customers/{customerId}/{password}")
 	public ResponseEntity<Customer> authenticateCustomer(@PathVariable int customerId, String password)
 			throws AuthenticationFailedException {
 		Customer cus = customerService.authenticateCustomer(customerId, password);
