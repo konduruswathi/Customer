@@ -49,12 +49,11 @@ public class CustomerController {
 		return new ResponseEntity<Customer>(HttpStatus.OK);
 	}
 
-	@GetMapping("/customers/{customerId}/{password}")
-	public ResponseEntity<Customer> authenticateCustomer(@PathVariable int customerId, String password)
-			throws AuthenticationFailedException {
-		Customer cus = customerService.authenticateCustomer(customerId, password);
-
-		return new ResponseEntity<Customer>(HttpStatus.OK);
+	@PostMapping("/customers/authen")
+	public ResponseEntity<Customer> authentication(@RequestBody Customer customer) {
+		ResponseEntity<Customer> responseEntity = new ResponseEntity<Customer>(
+				customerService.authenticateCustomer(customer.getCustomerId(), customer.getPassword()), HttpStatus.OK);
+		return responseEntity;
 
 	}
 }

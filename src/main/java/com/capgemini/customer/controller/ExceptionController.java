@@ -14,26 +14,24 @@ import com.capgemini.customer.entities.ErrorMessage;
 import com.capgemini.customer.exception.AuthenticationFailedException;
 import com.capgemini.customer.exception.CustomerNotFoundException;
 
-
-
 public class ExceptionController {
-Logger log = LoggerFactory.getLogger(this.getClass());
-	
+	Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@ExceptionHandler(value = CustomerNotFoundException.class)
-	public  ResponseEntity<ErrorMessage> customerNotFoundException(
-			CustomerNotFoundException customerNotFoundException, HttpServletRequest request) {
+	public ResponseEntity<ErrorMessage> customerNotFoundException(CustomerNotFoundException customerNotFoundException,
+			HttpServletRequest request) {
 		ErrorMessage errorMessage = new ErrorMessage(request.getRequestURI(), customerNotFoundException.getMessage(),
 				LocalDateTime.now(), HttpStatus.NOT_FOUND);
 		log.error(errorMessage.toString());
 		return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
 	}
 
-@ExceptionHandler(value = AuthenticationFailedException.class)
-public  ResponseEntity<ErrorMessage> authFailedException(
-		AuthenticationFailedException customerNotFoundException, HttpServletRequest request) {
-	ErrorMessage errorMessage = new ErrorMessage(request.getRequestURI(), customerNotFoundException.getMessage(),
-			LocalDateTime.now(), HttpStatus.FORBIDDEN);
-	log.info(errorMessage.toString());
-	return new ResponseEntity<>(errorMessage, HttpStatus.FORBIDDEN);
-}
+	@ExceptionHandler(value = AuthenticationFailedException.class)
+	public ResponseEntity<ErrorMessage> authFailedException(AuthenticationFailedException customerNotFoundException,
+			HttpServletRequest request) {
+		ErrorMessage errorMessage = new ErrorMessage(request.getRequestURI(), customerNotFoundException.getMessage(),
+				LocalDateTime.now(), HttpStatus.FORBIDDEN);
+		log.info(errorMessage.toString());
+		return new ResponseEntity<>(errorMessage, HttpStatus.FORBIDDEN);
+	}
 }

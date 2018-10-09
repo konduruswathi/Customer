@@ -35,60 +35,76 @@ public class CustomerControllerTest {
 	private CustomerController customerController;
 	private MockMvc mockmvc;
 	Customer customer;
+
 	@Before
 	public void setup() {
-	MockitoAnnotations.initMocks(this);
-	mockmvc=MockMvcBuilders.standaloneSetup(customerController).build();
+		MockitoAnnotations.initMocks(this);
+		mockmvc = MockMvcBuilders.standaloneSetup(customerController).build();
 	}
+
 	@Test
-	public void testaddCustomer() throws Exception{
-		when(customerService.addCustomer(Mockito.isA(Customer.class))).thenReturn(new Customer(1234, "swathi", "swathi06@gmail.com", "hyderabad", "swathi1"));
-		mockmvc.perform(post("/customer").contentType(MediaType.APPLICATION_JSON_UTF8).content("{\"customerId\":\"1234\",\"customerName\":\"swathi\",\"email\":\"swathi@gmail.com\",\"address\":\"hyderabad\",\"password\":\"swathi1\"}")
-		.accept(MediaType.APPLICATION_JSON_UTF8)).andExpect(status().isOk())
-		.andExpect(jsonPath("$.customerId").exists())
-		.andExpect(jsonPath("$.customerName").exists())
-		.andExpect(jsonPath("$.email").exists())
-		.andExpect(jsonPath("$.address").exists())
-		.andExpect(jsonPath("$.password").exists())
-		
-		.andExpect(jsonPath("$.customerId").value(1234))
-		.andExpect(jsonPath("$.customerName").value("swathi"))
-		.andExpect(jsonPath("$.email").value("swathi06@gmail.com"))
-		.andExpect(jsonPath("$.address").value("hyderabad"))
-		.andExpect(jsonPath("$.password").value("swathi1"))
-		.andDo(print());
-				
+	public void testaddCustomer() throws Exception {
+		when(customerService.addCustomer(Mockito.isA(Customer.class)))
+				.thenReturn(new Customer(1234, "swathi", "swathi06@gmail.com", "hyderabad", "swathi1"));
+		mockmvc.perform(post("/customer").contentType(MediaType.APPLICATION_JSON_UTF8).content(
+				"{\"customerId\":\"1234\",\"customerName\":\"swathi\",\"email\":\"swathi@gmail.com\",\"address\":\"hyderabad\",\"password\":\"swathi1\"}")
+				.accept(MediaType.APPLICATION_JSON_UTF8)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.customerId").exists()).andExpect(jsonPath("$.customerName").exists())
+				.andExpect(jsonPath("$.email").exists()).andExpect(jsonPath("$.address").exists())
+				.andExpect(jsonPath("$.password").exists())
+
+				.andExpect(jsonPath("$.customerId").value(1234)).andExpect(jsonPath("$.customerName").value("swathi"))
+				.andExpect(jsonPath("$.email").value("swathi06@gmail.com"))
+				.andExpect(jsonPath("$.address").value("hyderabad")).andExpect(jsonPath("$.password").value("swathi1"))
+				.andDo(print());
+
 	}
+
 	@Test
-	public void testupdateCustomer() throws Exception{
-		when(customerService.updateCustomer(Mockito.isA(Customer.class))).thenReturn(new Customer(1234,"swathi","swathi31@gmail.com","hyderabad","swathi1"));
-		when(customerService.getCustomerById(1234)).thenReturn(new Customer(1234,"swathi","swathi06@gmail.com","hyderabad","swathi1"));
-		mockmvc.perform(put("/customer").contentType(MediaType.APPLICATION_JSON_UTF8).content("{\"customerId\":\"1234\",\"customerName\":\"swathi\",\"email\":\"swathi31@gmail.com\",\"address\":\"hyderabad\",\"password\":\"swathi1\"}")
-		.accept(MediaType.APPLICATION_JSON_UTF8))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.email").exists())
-		.andExpect(jsonPath("$.email").value("swathi31@gmail.com"))
-		.andDo(print());
-		
+	public void testupdateCustomer() throws Exception {
+		when(customerService.updateCustomer(Mockito.isA(Customer.class)))
+				.thenReturn(new Customer(1234, "swathi", "swathi31@gmail.com", "hyderabad", "swathi1"));
+		/*when(customerService.getCustomerById(1234))
+				.thenReturn(new Customer(1234, "swathi", "swathi06@gmail.com", "hyderabad", "swathi1"));*/
+		mockmvc.perform(put("/customer").contentType(MediaType.APPLICATION_JSON_UTF8).content(
+				"{\"customerId\":\"1234\",\"customerName\":\"swathi\",\"email\":\"swathi31@gmail.com\",\"address\":\"hyderabad\",\"password\":\"swathi1\"}")
+				.accept(MediaType.APPLICATION_JSON_UTF8)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.email").exists()).andExpect(jsonPath("$.email").value("swathi31@gmail.com"))
+				.andDo(print());
+
 	}
+
 	@Test
-	 public void testDelete() throws Exception{
-		 when(customerService.getCustomerById(1234)).thenReturn(new Customer(1234,"swathi","swathi06@gmail.com","hyderabad","swathi1"));
-		 mockmvc.perform(delete("/customers/1234"))
-		 .andExpect(status().isOk());
-		 
-	 }
+	public void testDelete() throws Exception {
+		when(customerService.getCustomerById(1234))
+				.thenReturn(new Customer(1234, "swathi", "swathi06@gmail.com", "hyderabad", "swathi1"));
+		mockmvc.perform(delete("/customers/1234")).andExpect(status().isOk());
+
+	}
+
 	@Test
-	public void testgetCustomerById() throws Exception{
-		when(customerService.getCustomerById(1234)).thenReturn(new Customer(1234,"swathi","swathi06@gmail.com","hyderabad","swathi1"));
+	public void testgetCustomerById() throws Exception {
+		when(customerService.getCustomerById(1234))
+				.thenReturn(new Customer(1234, "swathi", "swathi06@gmail.com", "hyderabad", "swathi1"));
 		mockmvc.perform(MockMvcRequestBuilders.get("/customers/1234").accept(MediaType.APPLICATION_JSON_UTF8))
-		.andExpect(jsonPath("$.customerId").exists()).andExpect(jsonPath("$.customerName").exists())
-		.andExpect(jsonPath("$.email").exists()).andExpect(jsonPath("$.address").exists())
-		.andExpect(jsonPath("$.password").exists())
+				.andExpect(jsonPath("$.customerId").exists()).andExpect(jsonPath("$.customerName").exists())
+				.andExpect(jsonPath("$.email").exists()).andExpect(jsonPath("$.address").exists())
+				.andExpect(jsonPath("$.password").exists())
 
-		.andExpect(jsonPath("$.productId").value(20)).andExpect(jsonPath("$.productName").value("oneplus"))
-		.andExpect(jsonPath("$.productCategory").value("mobile")).andExpect(jsonPath("$.price").value(1000.0))
-		.andDo(print());
-}
+				.andExpect(jsonPath("$.customerId").value(1234)).andExpect(jsonPath("$.customerName").value("swathi"))
+				.andExpect(jsonPath("$.email").value("swathi06@gmail.com")).andExpect(jsonPath("$.address").value("hyderabad")).andExpect(jsonPath("$.password").value("swathi1"))
+				.andDo(print());
 	}
 
+	@Test
+	public void testAuthentication() throws Exception {
+		Customer customer = new Customer(1234, "swathi", "swathi06@gmail.com", "hyderabad", "swathi1");
+		when(customerService.authenticateCustomer(Mockito.isA(Integer.class), Mockito.isA(String.class)))
+				.thenReturn(customer);
+		mockmvc.perform(post("/customers/authen").contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content("{\"customerId\":\"1234\",\"password\":\"swathi1\"}").accept(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.customerId").exists()).andExpect(jsonPath("$.password").exists())
+				.andExpect(jsonPath("$.customerId").value(1234)).andExpect(jsonPath("$.password").value("swathi1"))
+				.andDo(print());
+	}
+}
